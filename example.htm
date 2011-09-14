@@ -7,7 +7,7 @@ $(function(){
 
   // gcm.systems contains an array of all systems hosted under account logging in as
   // query system by system-id or name
-  if (system = gcm.findSystem('314-000203')) {
+  if (var system = gcm.findSystem('314-000203')) {
     // do stuff here
     console.log(system)
     var data = system.history.weight({days: 720});
