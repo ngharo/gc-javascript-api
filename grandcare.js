@@ -1,5 +1,5 @@
 String.prototype.containsErrors = function() {
-	return (this.indexOf('ERROR') === -1) || (this.indexOf('FAILURE') === -1) ? true : false;
+	return (this.indexOf('ERROR') === - 1) || (this.indexOf('FAILURE') === - 1) ? true: false;
 };
 
 /**
@@ -13,10 +13,17 @@ function CareNote(system) {
 
 	this.create = function(subject, author, body) {
 		this.op = 'create';
-		var data = this.get({op: this.op, subject: subject, author: author, body: body});
+		var data = this.get({
+			op: this.op,
+			subject: subject,
+			author: author,
+			body: body
+		});
 
 		// push onto existing array
-		if(this.read.data == undefined) { this.read.data = new Array(); }
+		if (this.read.data == undefined) {
+			this.read.data = new Array();
+		}
 		this.read.data.push(data);
 
 		return data;
@@ -24,11 +31,14 @@ function CareNote(system) {
 
 	this.remove = function(id) {
 		this.op = 'delete';
-		var data = this.get({op: this.op, id: id});
+		var data = this.get({
+			op: this.op,
+			id: id
+		});
 
-		if(this.read.data != undefined) {
-			for(var i=0; i<this.read.data.length; i++) {
-				if(id == this.read.data[i].id) {
+		if (this.read.data != undefined) {
+			for (var i = 0; i < this.read.data.length; i++) {
+				if (id == this.read.data[i].id) {
 					delete(this.read.data[i]);
 				}
 			}
@@ -39,7 +49,9 @@ function CareNote(system) {
 
 	this.read = function(args) {
 		// optional args: id, date, days
-		if(typeof(args) != 'object') { args = {};	}
+		if (typeof(args) != 'object') {
+			args = {};
+		}
 		args.op = 'read';
 		this.read.data = this.get(args);
 
@@ -48,14 +60,16 @@ function CareNote(system) {
 
 	this.update = function(id, args) {
 		// optional args: subject, author, body
-		if(typeof(args) != 'object') { args = {};	}
+		if (typeof(args) != 'object') {
+			args = {};
+		}
 		args.op = 'update';
 		args.id = id;
 		var data = this.get(args);
 
-		if(this.read.data != undefined) {
-			for(var i=0; i<this.read.data.length; i++) {
-				if(id == this.read.data[i].id) {
+		if (this.read.data != undefined) {
+			for (var i = 0; i < this.read.data.length; i++) {
+				if (id == this.read.data[i].id) {
 					this.read.data[i] = data;
 				}
 			}
@@ -71,26 +85,33 @@ function CareGiver(system) {
 
 	this.create = function(firstname, lastname, args) {
 		// optional args: address, city, state, zip, homephone, workphone, cellphone, pager, email
-		if(typeof(args) != 'object') { args = {};	}
+		if (typeof(args) != 'object') {
+			args = {};
+		}
 		args.op = 'create';
 		args.firstname = firstname;
 		args.lastname = lastname;
 		var data = this.get(args);
 
 		// push onto existing array
-		if(this.read.data == undefined) { this.read.data = new Array(); }
+		if (this.read.data == undefined) {
+			this.read.data = new Array();
+		}
 		this.read.data.push(data);
 
-		return data;	
+		return data;
 	}
 
 	this.remove = function(id) {
 		this.op = 'delete';
-		var data = this.get({op: this.op, id: id});
+		var data = this.get({
+			op: this.op,
+			id: id
+		});
 
-		if(this.read.data != undefined) {
-			for(var i=0; i<this.read.data.length; i++) {
-				if(id == this.read.data[i].id) {
+		if (this.read.data != undefined) {
+			for (var i = 0; i < this.read.data.length; i++) {
+				if (id == this.read.data[i].id) {
 					delete(this.read.data[i]);
 				}
 			}
@@ -99,7 +120,9 @@ function CareGiver(system) {
 
 	this.read = function(args) {
 		// optional args: id
-		if(typeof(args) != 'object') { args = {};	}
+		if (typeof(args) != 'object') {
+			args = {};
+		}
 		args.op = 'read';
 
 		this.read.data = this.get(args);
@@ -114,9 +137,9 @@ function CareGiver(system) {
 		var data = this.get(args);
 
 		// update existing data if exists
-		if(this.read.data != undefined) {
-			for(var i=0; i<this.read.data.length; i++) {
-				if(id == this.read.data[i].id) {
+		if (this.read.data != undefined) {
+			for (var i = 0; i < this.read.data.length; i++) {
+				if (id == this.read.data[i].id) {
 					this.read.data[i] = data;
 				}
 			}
@@ -135,10 +158,10 @@ function Device(system) {
 	this.protocols = ['BT', 'Internal', 'OTU2', 'Tunstall', 'X10', 'ZigBee', 'ZWave'];
 	this.classes = ['Alarm', 'Bed', 'BP', 'Button', 'Door', 'Gluc', 'Modem', 'Motion', 'Switch', 'Temp', 'Weight'];
 	this.models = [150, 300, 200, 125, 401, 400, 500, 102, 100, 101, 900, 1100, 350, 250, 152, 1, 600, 800, 700, 1000, 501, 550, 151];
-	
+
 	this.validator = function(what, type_obj) {
 		if (what == '' || what == undefined) return true;
-		return (this.type_obj.indexOf(what) >= 0) ? true : false;
+		return (this.type_obj.indexOf(what) >= 0) ? true: false;
 	}
 
 	this.prototype.protocol_isValid = this.validator;
@@ -150,11 +173,13 @@ function Device(system) {
 		args.op = 'create';
 		args.modelid = model_id;
 		args.protocolid = protocol;
-		
-		if(this.model_isValid(model_id, self.models) && this.protocol_isValid(protocol, self.protocols)) {
+
+		if (this.model_isValid(model_id, self.models) && this.protocol_isValid(protocol, self.protocols)) {
 			var data = this.get(args);
 
-			if(this.read.data == undefined) { this.read.data = new Array(); }
+			if (this.read.data == undefined) {
+				this.read.data = new Array();
+			}
 			this.read.data.push(data);
 
 			return data;
@@ -165,11 +190,14 @@ function Device(system) {
 
 	this.remove = function(id) {
 		this.op = 'delete';
-		var data = this.get({op: this.op, id: id});
+		var data = this.get({
+			op: this.op,
+			id: id
+		});
 
-		if(this.read.data != undefined) {
-			for(var i=0; i<this.read.data.length; i++) {
-				if(id == this.read.data[i].id) {
+		if (this.read.data != undefined) {
+			for (var i = 0; i < this.read.data.length; i++) {
+				if (id == this.read.data[i].id) {
 					delete(this.read.data[i]);
 				}
 			}
@@ -180,10 +208,12 @@ function Device(system) {
 
 	// id class protocol
 	this.read = function(args) {
-		if(typeof(args) != 'object') { args = {};	}
+		if (typeof(args) != 'object') {
+			args = {};
+		}
 		args.op = 'read';
 
-		if(this.class_isValid(args.class, self.classes) && this.protocol_isValid(args.protocol, self.protocols)) {
+		if (this.class_isValid(args.class, self.classes) && this.protocol_isValid(args.protocol, self.protocols)) {
 			this.read.data = this.get(args);
 			return this.read.data;
 		} else {
@@ -192,10 +222,12 @@ function Device(system) {
 	}
 
 	this.readmodel = function(args) {
-		if(typeof(args) != 'object') { args = {};	}
+		if (typeof(args) != 'object') {
+			args = {};
+		}
 		args.op = 'readmodel';
 
-		if(this.class_isValid(args.class, self.classes) && this.protocol_isValid(args.protocol, self.classes)) {
+		if (this.class_isValid(args.class, self.classes) && this.protocol_isValid(args.protocol, self.classes)) {
 			this.readmodel.data = this.get(args);
 			return this.readmodel.data;
 		} else {
@@ -204,16 +236,18 @@ function Device(system) {
 	}
 
 	this.update = function(id, args) {
-		if(typeof(args) != 'object') { args = {};	}
+		if (typeof(args) != 'object') {
+			args = {};
+		}
 		args.op = 'update';
 
-		if(this.protocol_isValid(args.protocol, self.protocols)) {
+		if (this.protocol_isValid(args.protocol, self.protocols)) {
 			var data = this.get(args);
 
 			// update existing data if exists
-			if(this.read.data != undefined) {
-				for(var i=0; i<this.read.data.length; i++) {
-					if(id == this.read.data[i].id) {
+			if (this.read.data != undefined) {
+				for (var i = 0; i < this.read.data.length; i++) {
+					if (id == this.read.data[i].id) {
 						this.read.data[i] = data;
 					}
 				}
@@ -237,7 +271,9 @@ function Log(system) {
 		this.op = 'list';
 		this.xml_item = 'file';
 
-		this.list.data = this.get({op: this.op});
+		this.list.data = this.get({
+			op: this.op
+		});
 		return this.list.data;
 	}
 
@@ -246,7 +282,11 @@ function Log(system) {
 		this.op = 'show';
 		this.xml_item = 'log-lines';
 
-		var data = this.get({op: this.op, logfile: logfile, lines: lines});
+		var data = this.get({
+			op: this.op,
+			logfile: logfile,
+			lines: lines
+		});
 		return data;
 	}
 }
@@ -286,10 +326,12 @@ function SystemStatus() {
 function History(system) {
 	this.system = system.context;
 	this.subsystem = 'history';
-	this.op = '';	
+	this.op = '';
 
 	this.bed = function(args) {
-		if(typeof(args) != 'object') { args = {};	}
+		if (typeof(args) != 'object') {
+			args = {};
+		}
 		args.op = 'bed'
 		this.bed.data = this.get(args);
 
@@ -297,7 +339,9 @@ function History(system) {
 	}
 
 	this.bp = function(args) {
-		if(typeof(args) != 'object') { args = {};	}
+		if (typeof(args) != 'object') {
+			args = {};
+		}
 		args.op = 'bp';
 		this.bp.data = this.get(args);
 
@@ -305,15 +349,19 @@ function History(system) {
 	}
 
 	this.cid = function(args) {
-		if(typeof(args) != 'object') { args = {};	}
+		if (typeof(args) != 'object') {
+			args = {};
+		}
 		args.op = 'cid';
 		this.cid.data = this.get(args);
-		
+
 		return this.cid.data;
 	}
 
 	this.door = function(args) {
-		if(typeof(args) != 'object') { args = {};	}
+		if (typeof(args) != 'object') {
+			args = {};
+		}
 		args.op = 'door';
 		this.door.data = this.get(args);
 
@@ -321,7 +369,9 @@ function History(system) {
 	}
 
 	this.gluc = function(args) {
-		if(typeof(args) != 'object') { args = {};	}
+		if (typeof(args) != 'object') {
+			args = {};
+		}
 		args.op = 'gluc';
 		this.gluc.data = this.get(args);
 
@@ -329,7 +379,9 @@ function History(system) {
 	}
 
 	this.motion = function(args) {
-		if(typeof(args) != 'object') { args = {};	}
+		if (typeof(args) != 'object') {
+			args = {};
+		}
 		args.op = 'motion';
 		this.motion.data = this.get(args);
 
@@ -337,7 +389,9 @@ function History(system) {
 	}
 
 	this.temp = function(args) {
-		if(typeof(args) != 'object') { args = {};	}
+		if (typeof(args) != 'object') {
+			args = {};
+		}
 		args.op = 'temp';
 		this.temp.data = this.get(args);
 
@@ -345,7 +399,9 @@ function History(system) {
 	}
 
 	this.weight = function(args) {
-		if(typeof(args) != 'object') { args = {};	}
+		if (typeof(args) != 'object') {
+			args = {};
+		}
 		args.op = 'weight';
 		this.weight.data = this.get(args);
 
@@ -355,38 +411,38 @@ function History(system) {
 
 History.prototype.chart = function(chart, data) {
 	this.dataHandler = function(i, j, k, v, column) {
-		switch(k) {
-			case 'timestamp':
-				if (column) { 
-					chart.addColumn('date', 'Date');
-				} else {
-					chart.setValue(i, j, new Date(v));
-				}
-				break;
+		switch (k) {
+		case 'timestamp':
+			if (column) {
+				chart.addColumn('date', 'Date');
+			} else {
+				chart.setValue(i, j, new Date(v));
+			}
+			break;
 
-			default:
-				if (column) {
-					chart.addColumn('number', k);
-				} else {
-					chart.setValue(i, j, parseInt(v));
-				}
+		default:
+			if (column) {
+				chart.addColumn('number', k);
+			} else {
+				chart.setValue(i, j, parseInt(v));
+			}
 
 		}
 	}
-	
-	for(i=0; i<data.length;i++) {
+
+	for (i = 0; i < data.length; i++) {
 		// add columns
-		if(i==0) {
-			for(var k in data[i]) {
+		if (i == 0) {
+			for (var k in data[i]) {
 				this.dataHandler(i, 0, k, data[i][k], true);
 			}
 
 			chart.addRows(data.length);
 		}
-		
+
 		// add values
 		var j = 0;
-		for(var k in data[i]) {
+		for (var k in data[i]) {
 			this.dataHandler(i, j, k, data[i][k], false);
 			j++;
 		}
@@ -395,29 +451,27 @@ History.prototype.chart = function(chart, data) {
 	return chart;
 }
 
-
 function get(args) {
 	var results = new Array();
 	var req = new Request(this.system, this.subsystem, args);
 
 	// if xml
-	if(req.xhr.responseXML != undefined) {
+	if (req.xhr.responseXML != undefined) {
 		if (req.is_valid(req.xhr.responseXML)) {
-			if(this.xml_item == undefined) this.xml_item = this.op;
+			if (this.xml_item == undefined) this.xml_item = this.op;
 
 			var items = $(req.xhr.responseXML).find(this.xml_item);
 			if (items.length == 0) return true; // for operations with only SUCCESS | FAILURE response
-
 			items.each(function() {
 				var response = new Object();
 
-				for(var i=0; i<this.childNodes.length; i++) {
+				for (var i = 0; i < this.childNodes.length; i++) {
 					if (this.childNodes[i].tagName != undefined) {
 						// javascript no likey dashes
 						var item = this.childNodes[i].tagName.replace('-', '_');
 
 						// catch empty XML nodes
-						var value = (this.childNodes[i].firstChild == null) ? '' : this.childNodes[i].firstChild.nodeValue;
+						var value = (this.childNodes[i].firstChild == null) ? '': this.childNodes[i].firstChild.nodeValue;
 						eval('response.' + item + ' = "' + value + '";');
 					}
 				}
@@ -429,16 +483,15 @@ function get(args) {
 			return false;
 		}
 
-	// if json
+		// if json
 	} else {
-		if(typeof(req.xhr.responseText) == 'object') {
+		if (typeof(req.xhr.responseText) == 'object') {
 
 		}
 		// eval json object
 	}
 	return results;
 }
-
 
 /**
  * @constructor
@@ -478,28 +531,33 @@ function GCApi(url, user, pass) {
 	this.context.history = 0;
 
 	// perform remote login
-	self.GET(self.gcm_url, 'services.php', {sname: 'remotelogin', username: self.gcm_user, rawpassword: self.gcm_pass}, true);
+	self.GET(self.gcm_url, 'services.php', {
+		sname: 'remotelogin',
+		username: self.gcm_user,
+		rawpassword: self.gcm_pass
+	},
+	true);
 
-	if(!self.data.containsErrors()) {
+	if (!self.data.containsErrors()) {
 		self.logged_in = true;
 		// split remotelogin response by line
-		$.each(self.data.split("\n"), function(k,v) {
-			if(v != '') {
+		$.each(self.data.split("\n"), function(k, v) {
+			if (v != '') {
 				// split each line by delimiter
 				self.systems.push(new System(v.split('@@')));
 			}
 		});
-	} 
+	}
 }
 
 GCApi.prototype.findSystem = function(id) {
 	var _ = this;
 
-	for(i=0; i < _.systems.length; i++) {
+	for (i = 0; i < _.systems.length; i++) {
 		if (_.systems[i].name.indexOf(id) >= 0) {
 			_.context = _.systems[i];
 			_.context.history = new History(_);
-			return _.systems[i];	
+			return _.systems[i];
 		}
 	}
 
@@ -511,7 +569,7 @@ GCApi.prototype.inspect = function() {
 };
 
 GCApi.prototype.GET = function(url, page, params, sync) {
-	var as = (sync) ? false : true;
+	var as = (sync) ? false: true;
 	var _ = this;
 
 	$.ajax({
@@ -530,3 +588,4 @@ CareNote.prototype.get = get;
 CareGiver.prototype.get = get;
 Device.prototype.get = get;
 Log.prototype.get = get;
+
