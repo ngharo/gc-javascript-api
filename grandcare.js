@@ -1,5 +1,5 @@
 String.prototype.containsErrors = function() {
-	return (this.indexOf('ERROR') === 0) || (this.indexOf('FAILURE') === 0) ? true : false;
+	return (this.indexOf('ERROR') === -1) || (this.indexOf('FAILURE') === -1) ? true : false;
 };
 
 /**
@@ -496,7 +496,7 @@ GCApi.prototype.findSystem = function(id) {
 	var _ = this;
 
 	for(i=0; i < _.systems.length; i++) {
-		if (_.systems[i].name.indexOf(id) > 0) {
+		if (_.systems[i].name.indexOf(id) >= 0) {
 			_.context = _.systems[i];
 			_.context.history = new History(_);
 			return _.systems[i];	
